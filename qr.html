@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR-код — ScandiBakes &amp; Co.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --cream: #3B2318;
+      --milk: #2A180E;
+      --warm: #543628;
+      --terracotta: #D4A373;
+      --coffee: #FBF8F3;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: radial-gradient(circle at 20% 0%, #4A2E20 0%, var(--cream) 45%, #241209 100%);
+      color: var(--coffee);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .card {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(42, 24, 14, 0.92);
+      border: 1px solid var(--warm);
+      border-radius: 28px;
+      padding: 32px 28px 28px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+      text-align: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--terracotta);
+      color: var(--milk);
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .subtitle {
+      margin: 0 0 22px;
+      color: var(--terracotta);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .qr-wrap {
+      background: #fff;
+      border-radius: 20px;
+      padding: 16px;
+      display: inline-block;
+      line-height: 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+    #qrcode img, #qrcode canvas { display: block; width: 280px; height: 280px; }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      background: var(--cream);
+      border: 1px solid var(--warm);
+      border-radius: 999px;
+      padding: 5px;
+      margin: 0 auto 18px;
+      max-width: 380px;
+    }
+    .tab {
+      flex: 1;
+      border: 0;
+      cursor: pointer;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--coffee);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all .2s;
+    }
+    .tab:hover { color: var(--terracotta); }
+    .tab.active { background: var(--terracotta); color: var(--milk); }
+    .url {
+      margin: 18px 0 16px;
+      font-size: 12.5px;
+      color: #D9C6B4;
+      word-break: break-all;
+      line-height: 1.5;
+    }
+    .actions { display: flex; gap: 10px; }
+    .btn {
+      flex: 1;
+      border: 0;
+      cursor: pointer;
+      padding: 12px 14px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      transition: transform .15s, background .2s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--terracotta); color: var(--milk); }
+    .btn-primary:hover { background: #C08C5C; }
+    .btn-ghost { background: transparent; color: var(--coffee); border: 1px solid var(--warm); }
+    .btn-ghost:hover { border-color: var(--terracotta); color: var(--terracotta); }
+    .hint { margin: 18px 0 0; font-size: 11.5px; color: #B99F8B; line-height: 1.5; }
+    a { color: var(--terracotta); }
+    @media (max-width: 430px) {
+      .card { padding: 26px 18px 22px; }
+      #qrcode img, #qrcode canvas { width: 230px; height: 230px; }
+      h1 { font-size: 25px; }
+    }
+    @media print {
+      body { background: #fff; color: #000; padding: 0; }
+      .card { box-shadow: none; border: 0; background: #fff; color: #000; }
+      .tabs, .actions, .hint, .url { display: none; }
+      h1, .subtitle { color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="badge">S</div>
+    <h1>ScandiBakes &amp; Co.</h1>
+    <p class="subtitle">Наведите камеру телефона</p>
+
+    <div class="tabs">
+      <button class="tab active" id="tab-site" type="button">Сайт-книга</button>
+      <button class="tab" id="tab-repo" type="button">GitHub</button>
+    </div>
+
+    <div class="qr-wrap"><div id="qrcode"></div></div>
+
+    <p class="url" id="url"></p>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="download" type="button">Скачать PNG</button>
+      <button class="btn btn-ghost" id="copy" type="button">Копировать ссылку</button>
+    </div>
+
+    <p class="hint">QR-код ведёт на опубликованную страницу. Кнопка «Скачать PNG» сохраняет картинку — её можно распечатать или отправить в мессенджере.</p>
+  </main>
+
+  <script>
+    // Адрес сайта вычисляется автоматически, адрес репозитория — при публикации.
+    const SITE_URL = location.origin + location.pathname.replace(/qr\.html$/i, '');
+    const REPO_URL = 'https://github.com/AnonINC111/scandibakes';
+
+    let currentUrl = SITE_URL;
+    const qr = new QRCode(document.getElementById('qrcode'), {
+      text: currentUrl,
+      width: 560,
+      height: 560,
+      colorDark: '#2A180E',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.H
+    });
+
+    const urlEl = document.getElementById('url');
+    const siteTab = document.getElementById('tab-site');
+    const repoTab = document.getElementById('tab-repo');
+
+    function render(url, activeTab) {
+      currentUrl = url;
+      qr.clear();
+      qr.makeCode(url);
+      urlEl.textContent = url;
+      siteTab.classList.toggle('active', activeTab === 'site');
+      repoTab.classList.toggle('active', activeTab === 'repo');
+    }
+
+    siteTab.addEventListener('click', () => render(SITE_URL, 'site'));
+    repoTab.addEventListener('click', () => render(REPO_URL, 'repo'));
+
+    document.getElementById('copy').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(currentUrl);
+        const btn = document.getElementById('copy');
+        btn.textContent = 'Скопировано!';
+        setTimeout(() => btn.textContent = 'Копировать ссылку', 1600);
+      } catch (e) {
+        window.prompt('Скопируйте ссылку:', currentUrl);
+      }
+    });
+
+    document.getElementById('download').addEventListener('click', () => {
+      const canvas = document.querySelector('#qrcode canvas');
+      const img = document.querySelector('#qrcode img');
+      const link = document.createElement('a');
+      link.download = 'scandibakes-qr.png';
+      link.href = canvas ? canvas.toDataURL('image/png') : img.src;
+      link.click();
+    });
+
+    render(SITE_URL, 'site');
+  </script>
+</body>
+</html>
