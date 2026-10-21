@@ -10,6 +10,10 @@
 
 QR-код для быстрого открытия: [`qr.html`](qr.html) или [`qr.png`](qr.png)
 
+[<img src="qr.png" width="220" alt="QR-код сайта ScandiBakes & Co.">](https://anoninc111.github.io/scandibakes/)
+
+QR-код репозитория: [`qr-github.png`](qr-github.png)
+
 ## Возможности
 
 - каталог рецептов с поиском и фильтрами;
